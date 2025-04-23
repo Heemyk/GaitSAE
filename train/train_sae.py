@@ -61,10 +61,17 @@ def train_sae(model, data_loader, optimizer, epochs=100, device='cuda'):
             optimizer.zero_grad()
             
             # Forward pass
-            recon, activations = model(x)
-            
+            # For SparseVAE, unpack all four outputs
+            if isinstance(model, SparseVAE):
+                recon, mu, log_var, z = model(x)
+            else:
+                recon, activations = model(x)  # For normal SAE
+
             # Calculate loss
-            loss = model.loss_function(x, recon, activations)
+            if isinstance(model, SparseVAE):
+                loss = model.loss_function(x, recon, mu, log_var, z)
+            else:
+                loss = model.loss_function(x, recon, activations)
             
             # Backward pass
             loss.backward()

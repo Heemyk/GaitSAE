@@ -56,6 +56,8 @@ venv/
 # Output directories
 train/model_data/latent_space_analysis_*/
 train/model_data/sae_analysis_*/
+train/model_data/svae_analysis_*/
+train/model_data/latent_space_analysis_svae_*/
 
 # Miscellaneous
 .DS_Store
