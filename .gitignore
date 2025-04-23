@@ -1,0 +1,62 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+env/
+build/
+dist/
+*.egg-info/
+*.egg
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+env.bak/
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# Environments
+.env
+.venv
+ENV/
+venv/
+
+# IDEs
+.idea/
+.vscode/
+
+# Logs
+*.log
+
+# Data
+*.csv
+*.pth
+
+# Output directories
+train/model_data/latent_space_analysis_*/
+train/model_data/sae_analysis_*/
+
+# Miscellaneous
+.DS_Store
+Thumbs.db
