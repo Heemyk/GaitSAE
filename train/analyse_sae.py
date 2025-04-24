@@ -203,7 +203,7 @@ def main():
     
     # Analyze specific features
     print("Analyzing feature activations...")
-    for feature_idx in range(20):  # Analyze first 3 features
+    for feature_idx in range(100):  # Analyze first 3 features
         # Basic activation analysis
         activations = analyze_feature_activations(model, next(iter(processed_data.values())), feature_idx, output_dir)
         print(f"Feature {feature_idx} - Mean activation: {np.mean(activations):.4f}, "

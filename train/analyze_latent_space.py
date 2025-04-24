@@ -83,36 +83,36 @@ def analyze_feature_importance(latent_representations, output_dir):
     return feature_importance
 
 def reconstruct_from_feature(model, feature_idx, input_dim):
-    """Reconstruct signals using a single feature"""
+    """Reconstruct signals using a single feature and convert back to time domain"""
     # Create a one-hot vector for the feature
-    feature_vector = torch.zeros(1, model.encoder_weight.shape[0])
+    feature_vector = torch.zeros(1, model.encoder_weight.shape[0])  # Use encoder_weight's first dimension for latent_dim
     feature_vector[0, feature_idx] = 1
-    
+
     # Decode the feature
     with torch.no_grad():
         reconstructed = model.decode(feature_vector)
-    
-    # Inverse wavelet transform
-    coeffs = pywt.wavedec(reconstructed.numpy().flatten(), 'db5', level=4)
-    reconstructed_signal = pywt.waverec(coeffs, 'db5')
-    
-    return reconstructed_signal
 
-def visualize_feature_reconstructions(model, input_dim, output_dir, num_features=5):
-    """Visualize reconstructions from individual features"""
-    plt.figure(figsize=(15, 3*num_features))
-    
+    # Convert the reconstructed signal back to time domain using inverse wavelet transform
+    reconstructed_signal = reconstructed.numpy().flatten()
+    coeffs = pywt.wavedec(reconstructed_signal, 'db5', level=4)
+    time_domain_signal = pywt.waverec(coeffs, 'db5')
+
+    return time_domain_signal
+
+def visualize_feature_reconstructions(model, input_dim, output_dir, num_features=100):
+    """Visualize reconstructions from individual features on the same axis"""
+    plt.figure(figsize=(15, 8))
+
     for i in range(num_features):
         reconstructed = reconstruct_from_feature(model, i, input_dim)
-        
-        plt.subplot(num_features, 1, i+1)
-        plt.plot(reconstructed)
-        plt.title(f'Reconstruction from Feature {i}')
-        plt.xlabel('Time')
-        plt.ylabel('Amplitude')
-    
+        plt.plot(reconstructed, label=f'Feature {i}')
+
+    plt.title('Reconstruction from Features')
+    plt.xlabel('Time')
+    plt.ylabel('Amplitude')
+    plt.legend(loc='upper right', ncol=2, fontsize='small')
     plt.tight_layout()
-    plt.savefig(os.path.join(output_dir, 'feature_reconstructions.png'))
+    plt.savefig(os.path.join(output_dir, 'feature_reconstructions_combined.png'))
     plt.close()
 
 def cluster_latent_space(latent_representations, output_dir, n_clusters=5):
@@ -226,4 +226,4 @@ def main():
     print(f"Analysis complete. Results saved to {output_dir}")
 
 if __name__ == "__main__":
-    main() 
+    main()
